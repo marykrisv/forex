@@ -2,8 +2,8 @@ package com.formedix.forex;
 
 import com.formedix.forex.model.Currency;
 import com.formedix.forex.model.ForexCurrency;
-import com.formedix.forex.singleton.CurrencyForexMap;
-import com.formedix.forex.singleton.DateForexMap;
+import com.formedix.forex.map.CurrencyForexMap;
+import com.formedix.forex.map.DateForexMap;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 

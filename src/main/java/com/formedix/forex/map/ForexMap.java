@@ -1,6 +1,6 @@
-package com.formedix.forex.singleton;
+package com.formedix.forex.map;
 
-import com.formedix.forex.csvReader.CsvReader;
+import com.formedix.forex.utils.CsvReader;
 
 import java.time.format.DateTimeFormatter;
 import java.util.List;

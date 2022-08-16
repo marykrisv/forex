@@ -1,4 +1,4 @@
-package com.formedix.forex.csvReader;
+package com.formedix.forex.utils;
 
 import com.opencsv.CSVReader;
 import org.springframework.util.ResourceUtils;

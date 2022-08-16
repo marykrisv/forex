@@ -1,4 +1,4 @@
-package com.formedix.forex.singleton;
+package com.formedix.forex.map;
 
 import com.formedix.forex.model.Currency;
 import com.formedix.forex.model.ForexCurrency;
