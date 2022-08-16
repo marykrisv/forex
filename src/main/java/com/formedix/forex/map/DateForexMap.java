@@ -34,21 +34,21 @@ public class DateForexMap extends ForexMap {
     @Override
     void populateMap() {
         contents.stream().forEach((content) -> {
-            String[] modifiedContent = Arrays.copyOfRange(content, 1, content.length);
+            String[] modifiedContent = Arrays.copyOfRange(content, 1, content.length - 1);
             LocalDate currentDate = LocalDate.parse(content[0], formatter);
 
             AtomicInteger currencyIndex = new AtomicInteger();
             List<ForexCurrency> list = Arrays.stream(modifiedContent)
                     .map((price) -> {
                         ForexCurrency forexCurrency = null;
-                        if (!price.equals("N/A") && !price.equals("")) {
-                            Currency currentCurrency = Currency.values()[currencyIndex.get()];
+                        Currency currentCurrency = Currency.values()[currencyIndex.get()];
 
-                            forexCurrency = ForexCurrency.builder()
-                                    .currency(currentCurrency)
-                                    .price(Double.parseDouble(price))
-                                    .build();
-                        }
+                        forexCurrency = ForexCurrency.builder()
+                                .date(currentDate)
+                                .currency(currentCurrency)
+                                .price((!price.equals("N/A") && !price.equals("")) ? Double.parseDouble(price) : 0)
+                                .build();
+
                         currencyIndex.getAndIncrement();
                         return forexCurrency;
                     })
