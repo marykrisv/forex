@@ -7,7 +7,6 @@ import com.formedix.forex.map.CurrencyForexMap;
 import com.formedix.forex.map.DateForexMap;
 import com.formedix.forex.model.Currency;
 import com.formedix.forex.model.ForexCurrency;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -19,10 +18,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Service
-@RequiredArgsConstructor
 @Slf4j
 public class ForexService {
-    private static final DecimalFormat df = new DecimalFormat("0.00");
+    private DecimalFormat df = new DecimalFormat("0.00");
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     public List<ForexCurrency> getAllReferenceRate(LocalDate date) {
