@@ -1,6 +1,7 @@
 package com.formedix.forex;
 
 import com.formedix.forex.model.Currency;
+import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
@@ -13,22 +14,22 @@ import java.time.LocalDate;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/forex")
+@RequestMapping("/api/forex")
 public class ForexController {
     private final ForexService forexService;
 
     @GetMapping
     public ResponseEntity<?> getAllReferenceRate(
-            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date
+            @RequestParam @ApiParam(value = "Date (yyyy-MM-dd)") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date
     ) {
         return ResponseEntity.ok(forexService.getAllReferenceRate(date));
     }
 
     @GetMapping("/convert")
     public ResponseEntity<?> convertCurrency(
-            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date,
-            @RequestParam("sourceCurrency") Currency sourceCurrency,
-            @RequestParam("targetCurrency") Currency targetCurrency,
+            @RequestParam @ApiParam(value = "Date (yyyy-MM-dd)") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date,
+            @RequestParam("sourceCurrency") @ApiParam(value = "Source Currency") Currency sourceCurrency,
+            @RequestParam("targetCurrency") @ApiParam(value = "Target Currency") Currency targetCurrency,
             @RequestParam Double amount
     ) {
         return ResponseEntity.ok(forexService.convertCurrency(date, sourceCurrency, targetCurrency, amount));
@@ -36,18 +37,18 @@ public class ForexController {
 
     @GetMapping("/highestExchangeRate")
     public ResponseEntity<?> getHighestRate(
-            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
-            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate,
-            @RequestParam("currency") Currency currency
+            @RequestParam @ApiParam(value = "Start Date (yyyy-MM-dd)") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
+            @RequestParam @ApiParam(value = "End Date (yyyy-MM-dd)") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate,
+            @RequestParam("currency") @ApiParam(value = "Currency") Currency currency
     ) {
         return ResponseEntity.ok(forexService.getHighestRate(startDate, endDate, currency));
     }
 
     @GetMapping("/averageExchangeRate")
     public ResponseEntity<?> getAverageRate(
-            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
-            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate,
-            @RequestParam("currency") Currency currency
+            @RequestParam @ApiParam(value = "Start Date (yyyy-MM-dd)") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
+            @RequestParam @ApiParam(value = "End Date (yyyy-MM-dd)") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate,
+            @RequestParam("currency") @ApiParam(value = "Currency") Currency currency
     ) {
         return ResponseEntity.ok(forexService.getAverageRate(startDate, endDate, currency));
     }

@@ -1,6 +1,7 @@
 package com.formedix.forex.map;
 
 import com.formedix.forex.utils.CsvReader;
+import lombok.extern.slf4j.Slf4j;
 
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -13,10 +14,15 @@ abstract public class ForexMap {
 
     private void getContents() {
         if (Objects.isNull(contents)) {
-            System.out.println("called here");
             contents = csvReader.getCsvContent("classpath:eurofxref-hist.csv");
         }
-        contents.remove(0);
+        removeHeader();
+    }
+
+    private void removeHeader() {
+        if (!Objects.isNull(contents)) {
+            contents.remove(0);
+        }
     }
 
     abstract void initializeMap();

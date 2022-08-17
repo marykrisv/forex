@@ -1,0 +1,9 @@
+server:
+  port : 8081
+spring:
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+info:
+  version: "1.0.0"
+  title: Forex Currency Title
