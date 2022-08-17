@@ -2,6 +2,7 @@ package com.formedix.forex;
 
 import com.formedix.forex.exception.ForexCurrencyInvalidCurrencyException;
 import com.formedix.forex.exception.ForexCurrencyNotFoundException;
+import com.formedix.forex.exception.InvalidDateRangeException;
 import com.formedix.forex.map.CurrencyForexMap;
 import com.formedix.forex.map.DateForexMap;
 import com.formedix.forex.model.Currency;
@@ -25,15 +26,15 @@ public class ForexService {
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     public List<ForexCurrency> getAllReferenceRate(LocalDate date) {
-        List<ForexCurrency> forexCurrencies = null;
+        List<ForexCurrency> forexCurrencies;
         HashMap<LocalDate, List<ForexCurrency>> map = DateForexMap.getInstance().getMap();
 
         if (!Objects.isNull(map)) {
             forexCurrencies = map.get(date);
 
             if (Objects.isNull(forexCurrencies) || forexCurrencies.isEmpty()) {
-                log.error(String.format("Date %s not found", date.format(formatter)));
-                throw new ForexCurrencyNotFoundException();
+                log.error(String.format("Forex currency list is empty for date %s", date.format(formatter)));
+                throw new ForexCurrencyNotFoundException(String.format("No currency found in date %s", date.format(formatter)));
             }
         } else {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Forex Currency CSV content is empty");
@@ -51,8 +52,8 @@ public class ForexService {
             forexCurrencies = map.get(date);
 
             if (Objects.isNull(forexCurrencies) || forexCurrencies.isEmpty()) {
-                log.error(String.format("Date %s not found", date.format(formatter)));
-                throw new ForexCurrencyNotFoundException();
+                log.error(String.format("Forex currency list is empty for date %s", date.format(formatter)));
+                throw new ForexCurrencyNotFoundException(String.format("No currency found in date %s", date.format(formatter)));
             }
 
             Double sourcePrice = forexCurrencies.get(sourceCurrency.ordinal()).getPrice();
@@ -74,7 +75,7 @@ public class ForexService {
 
     public Double getHighestRate(LocalDate startDate, LocalDate endDate, Currency currency) {
         if (startDate.isAfter(endDate)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Date Range is invalid!");
+            throw new InvalidDateRangeException("Date Range is invalid");
         }
 
         HashMap<Currency, List<ForexCurrency>> map = CurrencyForexMap.getInstance().getMap();
@@ -94,8 +95,7 @@ public class ForexService {
             if (maxPriceOptional.isPresent()) {
                 maxPrice = maxPriceOptional.get();
             } else {
-                log.error(String.format("Currency %s not found", currency.toString()));
-                throw new ForexCurrencyNotFoundException();
+                throw new ForexCurrencyNotFoundException(String.format("Currency %s not found", currency.toString()));
             }
         } else {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Forex Currency CSV content is empty");
@@ -105,6 +105,10 @@ public class ForexService {
     }
 
     public Double getAverageRate(LocalDate startDate, LocalDate endDate, Currency currency) {
+        if (startDate.isAfter(endDate)) {
+            throw new InvalidDateRangeException("Date Range is invalid");
+        }
+
         HashMap<Currency, List<ForexCurrency>> map = CurrencyForexMap.getInstance().getMap();
         Double averageRate = 0D;
 
@@ -122,8 +126,7 @@ public class ForexService {
             if (averagePriceOptional.isPresent()) {
                 averageRate = averagePriceOptional.getAsDouble();
             } else {
-                log.error(String.format("Currency %s not found", currency.toString()));
-                throw new ForexCurrencyNotFoundException();
+                throw new ForexCurrencyNotFoundException(String.format("Currency %s not found", currency.toString()));
             }
         } else {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Forex Currency CSV content is empty");
